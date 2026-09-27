@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Последний злодей — События</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #252525 0%,
+            #0d0d0d 45%,
+            #050505 100%
+        );
+
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 25px;
+}
+
+.container {
+    width: min(700px, 100%);
+    text-align: center;
+}
+
+
+/* =========================
+   ЗАГОЛОВОК
+========================= */
+
+.title {
+    font-size: 36px;
+    font-weight: 900;
+
+    letter-spacing: 4px;
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,.2),
+        0 0 30px rgba(255,0,0,.15);
+}
+
+.subtitle {
+    color: #888;
+    font-size: 14px;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   КАРТА
+========================= */
+
+.card {
+
+    min-height: 420px;
+
+    padding: 0;
+
+    border-radius: 24px;
+
+    border: 1px solid #444;
+
+    overflow: hidden;
+
+    background: #0d0d0d;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.65),
+        inset 0 0 30px rgba(255,255,255,.02);
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   АНИМАЦИЯ
+========================= */
+
+.card.show {
+    animation: cardAppear .4s ease;
+}
+
+@keyframes cardAppear {
+
+    0% {
+        opacity: 0;
+        transform:
+            scale(.94)
+            translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform:
+            scale(1)
+            translateY(0);
+    }
+
+}
+
+
+/* =========================
+   КАРТИНКА
+========================= */
+
+.card-image {
+
+    width: 100%;
+
+    height: 300px;
+
+    background:
+        #080808;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.card-image img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* =========================
+   ТЕКСТ КАРТЫ
+========================= */
+
+.card-content {
+
+    padding:
+        25px
+        35px
+        35px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(40,40,40,.98),
+            rgba(10,10,10,.98)
+        );
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+.card-number {
+
+    color: #777;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 15px;
+}
+
+.event-name {
+
+    font-size: 28px;
+
+    font-weight: 900;
+
+    margin-bottom: 18px;
+
+    color: #fff;
+}
+
+.event-description {
+
+    max-width: 560px;
+
+    font-size: 18px;
+
+    line-height: 1.6;
+
+    color: #ccc;
+}
+
+.event-description b {
+    color: white;
+}
+
+
+/* =========================
+   КНОПКА
+========================= */
+
+.draw-button {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 17px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6d1010,
+            #a91d1d
+        );
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.draw-button:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1515,
+            #c52626
+        );
+
+    box-shadow:
+        0 0 25px
+        rgba(255,40,40,.2);
+}
+
+.draw-button:active {
+
+    transform:
+        scale(.97);
+}
+
+
+/* =========================
+   ПЕРЕМЕШАТЬ
+========================= */
+
+.reset-button {
+
+    margin-top: 12px;
+
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid #333;
+
+    background: #171717;
+
+    color: #aaa;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.reset-button:hover {
+
+    background: #252525;
+
+    color: white;
+}
+
+
+/* =========================
+   СЧЁТЧИК
+========================= */
+
+.counter {
+
+    margin-top: 18px;
+
+    color: #666;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   ТЕЛЕФОН
+========================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 25px;
+        letter-spacing: 2px;
+    }
+
+    .card {
+        min-height: 380px;
+    }
+
+    .card-image {
+        height: 220px;
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+
+    .event-name {
+        font-size: 24px;
+    }
+
+    .event-description {
+        font-size: 16px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- ЗАГОЛОВОК -->
+
+    <div class="title">
+        ПОСЛЕДНИЙ ЗЛОДЕЙ
+    </div>
+
+    <div class="subtitle">
+        КОЛОДА СОБЫТИЙ
+    </div>
+
+
+    <!-- КАРТА -->
+
+    <div
+        class="card"
+        id="card"
+    >
+
+
+        <!-- КАРТИНКА -->
+
+        <div
+            class="card-image"
+            id="card-image"
+        >
+        </div>
+
+
+        <!-- ТЕКСТ -->
+
+        <div class="card-content">
+
+            <div
+                class="card-number"
+                id="card-number"
+            >
+                Нажми кнопку, чтобы вытянуть карту
+            </div>
+
+
+            <div
+                class="event-name"
+                id="event-name"
+            >
+                СЛУЧАЙНОЕ СОБЫТИЕ
+            </div>
+
+
+            <div
+                class="event-description"
+                id="event-description"
+            >
+                Вытяни карту события
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- КНОПКИ -->
+
+    <button
+        class="draw-button"
+        onclick="drawCard()"
+    >
+        🎴 ВЫТЯНУТЬ КАРТУ
+    </button>
+
+
+    <button
+        class="reset-button"
+        onclick="resetDeck()"
+    >
+        🔄 ПЕРЕМЕШАТЬ КОЛОДУ
+    </button>
+
+
+    <!-- СЧЁТЧИК -->
+
+    <div
+        class="counter"
+        id="counter"
+    >
+        Осталось карт: 11
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   НАСТРОЙКА КАРТИНОК
+=========================================================
+
+   Здесь ты можешь менять названия файлов.
+
+   Например:
+
+   "images/my_card.png"
+
+   или:
+
+   "cards/event1.jpg"
+
+========================================================= */
+
+const cardImages = {
+
+    "Городская паника":
+        "images/01_Городская_паника.png",
+
+    "Кража века":
+        "images/02_Кража_века.png",
+
+    "Предательство":
+        "images/03_Предательство.png",
+
+    "Чёрный рынок":
+        "images/04_Чёрный_рынок.png",
+
+    "Счастливый случай":
+        "images/05_Счастливый_случай.png",
+
+    "Двойной ход":
+        "images/06_Двойной_ход.png",
+
+    "Полицейский рейд":
+        "images/07_Полицейский_рейд.png",
+
+    "Подстава":
+        "images/08_Подстава.png",
+
+    "Облава":
+        "images/09_Облава.png",
+
+    "Короткий путь":
+        "images/10_Короткий_путь.png",
+
+    "Чёрный день":
+        "images/11_Чёрный_день.png"
+
+};
+
+
+/* =========================================================
+   КАРТЫ СОБЫТИЙ
+========================================================= */
+
+const events = [
+
+    {
+        name: "Городская паника",
+
+        description:
+            "Все игроки, кроме тебя, теряют <b>20 HP</b>."
+    },
+
+    {
+        name: "Кража века",
+
+        description:
+            "Выбери любого игрока. Он теряет <b>20 HP</b>, " +
+            "а ты восстанавливаешь <b>20 HP</b>."
+    },
+
+    {
+        name: "Предательство",
+
+        description:
+            "Выбери игрока. При его следующем попадании " +
+            "на ловушку <b>ловушка наносит ему двойной эффект</b>."
+    },
+
+    {
+        name: "Чёрный рынок",
+
+        description:
+            "Восстанови <b>25 HP</b>."
+    },
+
+    {
+        name: "Счастливый случай",
+
+        description:
+            "Восстанови <b>40 HP</b>."
+    },
+
+    {
+        name: "Двойной ход",
+
+        description:
+            "Сразу после окончания своего хода " +
+            "<b>брось кубик ещё раз</b> " +
+            "и сделай дополнительный ход."
+    },
+
+    {
+        name: "Полицейский рейд",
+
+        description:
+            "Выбранная территория " +
+            "<b>временно перестаёт наносить урон</b>."
+    },
+
+    {
+        name: "Подстава",
+
+        description:
+            "Перемести одну из своих ловушек " +
+            "на <b>любую другую</b> территорию."
+    },
+
+    {
+        name: "Облава",
+
+        description:
+            "Все игроки, находящиеся впереди тебя " +
+            "на маршруте, <b>отступают на 1 клетку</b>."
+    },
+
+    {
+        name: "Короткий путь",
+
+        description:
+            "Переместись <b>вперёд на 3 клетки</b>, " +
+            "но эффект клетки назначения всё равно срабатывает."
+    },
+
+    {
+        name: "Чёрный день",
+
+        description:
+            "Все игроки с <b>50 HP и больше</b> " +
+            "теряют <b>15 HP</b>."
+    }
+
+];
+
+
+/* =========================================================
+   КОЛОДА
+========================================================= */
+
+let deck = [];
+
+
+/* =========================================================
+   НАСТОЯЩИЙ РАНДОМ
+========================================================= */
+
+function secureRandomInt(max) {
+
+    const randomArray =
+        new Uint32Array(1);
+
+    const range =
+        0x100000000;
+
+    const limit =
+        Math.floor(range / max) * max;
+
+    let randomNumber;
+
+    do {
+
+        crypto.getRandomValues(
+            randomArray
+        );
+
+        randomNumber =
+            randomArray[0];
+
+    } while (
+        randomNumber >= limit
+    );
+
+    return randomNumber % max;
+}
+
+
+/* =========================================================
+   ПЕРЕМЕШИВАНИЕ
+========================================================= */
+
+function shuffle(array) {
+
+    const result = [...array];
+
+    for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            secureRandomInt(i + 1);
+
+        [
+            result[i],
+            result[j]
+        ] = [
+            result[j],
+            result[i]
+        ];
+    }
+
+    return result;
+}
+
+
+/* =========================================================
+   СОЗДАТЬ КОЛОДУ
+========================================================= */
+
+function createDeck() {
+
+    deck =
+        shuffle(events);
+
+    updateCounter();
+}
+
+
+/* =========================================================
+   ВЫТЯНУТЬ КАРТУ
+========================================================= */
+
+function drawCard() {
+
+
+    /*
+        Если колода закончилась,
+        создаём новую.
+    */
+
+    if (deck.length === 0) {
+
+        createDeck();
+
+    }
+
+
+    /*
+        Берём карту.
+    */
+
+    const event =
+        deck.pop();
+
+
+    const card =
+        document.getElementById(
+            "card"
+        );
+
+
+    /*
+        Перезапуск анимации.
+    */
+
+    card.classList.remove(
+        "show"
+    );
+
+    void card.offsetWidth;
+
+    card.classList.add(
+        "show"
+    );
+
+
+    /*
+        Номер / состояние.
+    */
+
+    document.getElementById(
+        "card-number"
+    ).textContent =
+        "КАРТА СОБЫТИЯ";
+
+
+    /*
+        КАРТИНКА
+
+        Берётся из объекта
+        cardImages.
+    */
+
+    const imagePath =
+        cardImages[event.name];
+
+
+    document.getElementById(
+        "card-image"
+    ).innerHTML =
+        imagePath
+            ? `<img
+                    src="${imagePath}"
+                    alt="${event.name}"
+               >`
+            : `
+                <div
+                    style="
+                        color:#666;
+                        font-size:16px;
+                    "
+                >
+                    Картинка не найдена
+                </div>
+              `;
+
+
+    /*
+        Название.
+    */
+
+    document.getElementById(
+        "event-name"
+    ).textContent =
+        event.name;
+
+
+    /*
+        Описание.
+    */
+
+    document.getElementById(
+        "event-description"
+    ).innerHTML =
+        event.description;
+
+
+    /*
+        Обновляем счётчик.
+    */
+
+    updateCounter();
+
+}
+
+
+/* =========================================================
+   СЧЁТЧИК
+========================================================= */
+
+function updateCounter() {
+
+    document.getElementById(
+        "counter"
+    ).textContent =
+        `Осталось карт: ${deck.length}`;
+
+}
+
+
+/* =========================================================
+   ПЕРЕМЕШАТЬ ЗАНОВО
+========================================================= */
+
+function resetDeck() {
+
+    createDeck();
+
+
+    document.getElementById(
+        "card-number"
+    ).textContent =
+        "КОЛОДА ПЕРЕМЕШАНА";
+
+
+    document.getElementById(
+        "card-image"
+    ).innerHTML =
+        "";
+
+
+    document.getElementById(
+        "event-name"
+    ).textContent =
+        "СЛУЧАЙНОЕ СОБЫТИЕ";
+
+
+    document.getElementById(
+        "event-description"
+    ).textContent =
+        "Нажми «ВЫТЯНУТЬ КАРТУ», " +
+        "чтобы получить случайное событие.";
+
+}
+
+
+/* =========================================================
+   ЗАПУСК
+========================================================= */
+
+createDeck();
+
+</script>
+
+</body>
+</html>
