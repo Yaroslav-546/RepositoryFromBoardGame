@@ -1,780 +1,943 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Последний злодей — HP</title>
+<title>Последний злодей — HP</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        body {
-            margin: 0;
-            padding: 25px;
-            min-height: 100vh;
+* {
+    box-sizing: border-box;
+}
 
-            background:
-                radial-gradient(
-                    circle at center,
-                    #292929 0%,
-                    #111111 55%,
-                    #050505 100%
-                );
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
 
-            color: #eeeeee;
-            font-family: Georgia, "Times New Roman", serif;
-        }
+    background:
+        radial-gradient(circle at top, #252525 0%, #0d0d0d 45%, #050505 100%);
 
-        /* Заголовок */
+    color: white;
+    padding: 25px;
+}
 
-        .title {
-            text-align: center;
-            font-size: 36px;
-            letter-spacing: 6px;
-            margin-bottom: 5px;
+/* HEADER */
 
-            color: #e5e5e5;
+.header {
+    text-align: center;
+    margin-bottom: 25px;
+}
 
-            text-shadow:
-                0 0 8px #000,
-                0 0 20px #000;
-        }
+.title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 
-        .subtitle {
-            text-align: center;
+    text-shadow:
+        0 0 10px rgba(255,255,255,.2),
+        0 0 30px rgba(255,0,0,.15);
+}
 
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            letter-spacing: 4px;
+.subtitle {
+    color: #888;
+    margin-top: 6px;
+    font-size: 14px;
+}
 
-            color: #777777;
+/* GRID */
 
-            margin-bottom: 30px;
-        }
+.players {
+    width: min(1100px, 100%);
+    margin: auto;
 
-        /* Игроки */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
 
-        .players {
-            max-width: 1000px;
-            margin: auto;
+/* PLAYER CARD */
 
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+.player {
+    position: relative;
 
-            gap: 20px;
-        }
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35,35,35,.98),
+            rgba(12,12,12,.98)
+        );
 
-        .player {
-            background:
-                linear-gradient(
-                    145deg,
-                    #242424,
-                    #0d0d0d
-                );
+    border: 1px solid #333;
+    border-radius: 18px;
 
-            border: 1px solid #555555;
+    padding: 22px;
 
-            border-radius: 18px;
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.5),
+        inset 0 0 20px rgba(255,255,255,.02);
 
-            padding: 22px;
+    transition:
+        transform .2s ease,
+        border .3s ease,
+        box-shadow .3s ease;
+}
 
-            box-shadow:
-                0 10px 25px rgba(0,0,0,0.8),
-                inset 0 0 25px rgba(255,255,255,0.025);
+.player:hover {
+    transform: translateY(-3px);
+}
 
-            transition: 0.2s;
-        }
+/* LOW HP EFFECT */
 
-        .player:hover {
-            border-color: #777777;
-        }
+.player.low {
+    animation: dangerPulse 1.5s infinite;
+}
 
-        /* Имя */
+@keyframes dangerPulse {
 
-        .player-name {
-            text-align: center;
+    0%,100% {
+        box-shadow:
+            0 15px 40px rgba(0,0,0,.5),
+            0 0 0 rgba(255,0,0,0);
+    }
 
-            font-size: 24px;
-            letter-spacing: 3px;
+    50% {
+        box-shadow:
+            0 15px 40px rgba(0,0,0,.5),
+            0 0 25px rgba(255,0,0,.25);
+    }
+}
 
-            margin-bottom: 5px;
-        }
+/* DEAD */
 
-        .player-number {
-            text-align: center;
+.player.dead {
+    filter: grayscale(.7);
+    border-color: #500;
+}
 
-            font-family: Arial, sans-serif;
+/* PLAYER NAME */
 
-            font-size: 10px;
-            letter-spacing: 3px;
+.name {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
 
-            color: #666666;
-        }
+/* HP NUMBERS */
 
-        /* HP */
+.hp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        .hp {
-            text-align: center;
+    margin-bottom: 10px;
+}
 
-            font-family: Arial, sans-serif;
+.hp {
+    font-size: 30px;
+    font-weight: 900;
+}
 
-            font-size: 55px;
-            font-weight: bold;
+.max {
+    color: #777;
+    font-size: 14px;
+}
 
-            margin-top: 12px;
+/* STATUS */
 
-            color: #eeeeee;
+.status {
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
-            text-shadow: 0 0 12px rgba(255,255,255,0.1);
-        }
+    padding: 5px 9px;
 
-        .hp-label {
-            text-align: center;
+    border-radius: 6px;
 
-            font-family: Arial, sans-serif;
+    background: rgba(255,255,255,.05);
+}
 
-            font-size: 10px;
-            letter-spacing: 4px;
+/* HP BAR */
 
-            color: #777777;
-        }
+.hp-bar {
+    width: 100%;
+    height: 20px;
 
-        /* Полоса HP */
+    background: #090909;
 
-        .hp-bar {
-            width: 100%;
-            height: 20px;
+    border-radius: 20px;
 
-            margin-top: 15px;
-            margin-bottom: 18px;
+    overflow: hidden;
 
-            background: #080808;
+    border: 1px solid #333;
 
-            border: 1px solid #444444;
+    box-shadow:
+        inset 0 2px 6px rgba(0,0,0,.8);
+}
 
-            border-radius: 20px;
+.hp-fill {
+    height: 100%;
+    width: 100%;
 
-            overflow: hidden;
-        }
+    border-radius: inherit;
 
-        .hp-fill {
-            height: 100%;
+    transition:
+        width .45s cubic-bezier(.2,.8,.2,1),
+        background .3s ease,
+        box-shadow .3s ease;
+}
 
-            width: 100%;
+/* COLORS */
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #7d1515,
-                    #c52c2c
-                );
+.hp-fill.green {
+    background: linear-gradient(
+        90deg,
+        #087f23,
+        #18d44c
+    );
 
-            box-shadow:
-                0 0 12px rgba(200,30,30,0.7);
+    box-shadow:
+        0 0 14px rgba(24,212,76,.5);
+}
 
-            transition:
-                width 0.25s ease,
-                background 0.25s ease;
-        }
+.hp-fill.yellow {
+    background: linear-gradient(
+        90deg,
+        #a66a00,
+        #ffd21c
+    );
 
-        /* Кнопки */
+    box-shadow:
+        0 0 14px rgba(255,210,28,.45);
+}
 
-        .buttons {
-            display: grid;
+.hp-fill.red {
+    background: linear-gradient(
+        90deg,
+        #8c0808,
+        #ff2525
+    );
 
-            grid-template-columns: repeat(3, 1fr);
+    box-shadow:
+        0 0 18px rgba(255,37,37,.6);
+}
 
-            gap: 7px;
-        }
+.hp-fill.dead {
+    background: #333;
+    box-shadow: none;
+}
 
-        button {
-            border: 1px solid #444444;
+/* BUTTONS */
 
-            border-radius: 8px;
+.controls {
+    display: grid;
 
-            padding: 10px 5px;
+    grid-template-columns:
+        repeat(4, 1fr);
 
-            color: white;
+    gap: 8px;
 
-            font-size: 15px;
-            font-weight: bold;
+    margin-top: 16px;
+}
 
-            cursor: pointer;
+button {
+    border: none;
 
-            transition: 0.15s;
-        }
+    padding: 11px 7px;
 
-        button:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.25);
-        }
+    border-radius: 9px;
 
-        button:active {
-            transform: translateY(1px);
-        }
+    background: #222;
 
-        /* Урон */
+    color: white;
 
-        .damage {
-            background: #351313;
-            border-color: #6b2929;
-        }
+    font-weight: bold;
 
-        /* Лечение */
+    cursor: pointer;
 
-        .heal {
-            background: #15351d;
-            border-color: #2d6338;
-        }
+    transition:
+        transform .12s ease,
+        background .2s ease;
+}
 
-        /* Сброс */
+button:hover {
+    background: #333;
+}
 
-        .reset {
-            width: 100%;
+button:active {
+    transform: scale(.94);
+}
 
-            margin-top: 8px;
+/* DAMAGE */
 
-            background: #171717;
+.damage {
+    background: #541313;
+}
 
-            border-color: #444444;
-        }
+.damage:hover {
+    background: #751717;
+}
 
-        /* Когда HP = 0 */
+/* HEAL */
 
-        .dead {
-            border-color: #222222;
-            opacity: 0.65;
-        }
+.heal {
+    background: #125020;
+}
 
-        .dead .hp {
-            color: #666666;
-        }
+.heal:hover {
+    background: #176a2b;
+}
 
-        .dead .hp-fill {
-            width: 0 !important;
+/* BIG ACTIONS */
 
-            background: #333333;
+.extra-controls {
+    display: flex;
+    gap: 8px;
 
-            box-shadow: none;
-        }
+    margin-top: 8px;
+}
 
-        /* Низ */
+.extra-controls button {
+    flex: 1;
+}
 
-        .footer {
-            text-align: center;
+.max-btn {
+    background: #333;
+}
 
-            margin-top: 25px;
+.reset-player {
+    background: #292929;
+}
 
-            font-family: Arial, sans-serif;
+/* LAST CHANGE */
 
-            font-size: 11px;
+.last-change {
+    margin-top: 12px;
 
-            color: #555555;
+    color: #777;
 
-            letter-spacing: 2px;
-        }
+    font-size: 12px;
 
-        /* Телефон */
+    min-height: 15px;
+}
 
-        @media (max-width: 700px) {
+/* FOOTER */
 
-            body {
-                padding: 15px;
-            }
+.global-controls {
+    width: min(1100px, 100%);
+    margin: 25px auto 0;
 
-            .players {
-                grid-template-columns: 1fr;
-            }
+    display: flex;
+    gap: 10px;
+}
 
-            .title {
-                font-size: 26px;
-            }
+.global-controls button {
+    flex: 1;
 
-        }
-    </style>
+    padding: 14px;
+
+    background: #171717;
+
+    border: 1px solid #333;
+}
+
+.global-controls button:hover {
+    background: #252525;
+}
+
+/* DEAD MESSAGE */
+
+.dead-message {
+    display: none;
+
+    margin-top: 10px;
+
+    text-align: center;
+
+    font-weight: 900;
+
+    color: #ff3333;
+
+    letter-spacing: 2px;
+}
+
+.player.dead .dead-message {
+    display: block;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .players {
+        grid-template-columns: 1fr;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .hp {
+        font-size: 26px;
+    }
+
+    button {
+        padding: 12px 5px;
+    }
+}
+
+</style>
 </head>
 
 <body>
+
+<div class="header">
 
     <div class="title">
         ПОСЛЕДНИЙ ЗЛОДЕЙ
     </div>
 
     <div class="subtitle">
-        ТРЕКЕР ЗДОРОВЬЯ
+        Система здоровья игроков
     </div>
 
+</div>
 
-    <div class="players">
 
+<div class="players">
 
-        <!-- КУКЛОВОД -->
+    <!-- КУКЛОВОД -->
 
-        <div class="player" id="player0">
+    <div class="player" id="player-0">
 
-            <div class="player-name">
-                Кукловод
+        <div class="name">
+            Кукловод
+        </div>
+
+        <div class="hp-row">
+
+            <div class="hp">
+                <span id="hp-0">200</span>
+                <span class="max">/ 200 HP</span>
             </div>
 
-            <div class="player-number">
-                ИГРОК 1
+            <div class="status" id="status-0">
+                ЗДОРОВ
             </div>
 
-            <div class="hp" id="hp0">
-                200
+        </div>
+
+        <div class="hp-bar">
+
+            <div
+                class="hp-fill green"
+                id="bar-0">
             </div>
 
-            <div class="hp-label">
-                HP
-            </div>
+        </div>
 
-            <div class="hp-bar">
-                <div
-                    class="hp-fill"
-                    id="bar0">
-                </div>
-            </div>
+        <div class="controls">
 
-            <div class="buttons">
+            <button class="damage" onclick="changeHP(0,-5)">−5</button>
+            <button class="damage" onclick="changeHP(0,-10)">−10</button>
+            <button class="damage" onclick="changeHP(0,-20)">−20</button>
+            <button class="damage" onclick="changeHP(0,-40)">−40</button>
 
-                <button
-                    class="damage"
-                    onclick="changeHP(0, -20)">
-                    −20
-                </button>
+        </div>
 
-                <button
-                    class="damage"
-                    onclick="changeHP(0, -10)">
-                    −10
-                </button>
+        <div class="extra-controls">
 
-                <button
-                    class="damage"
-                    onclick="changeHP(0, -5)">
-                    −5
-                </button>
+            <button class="heal" onclick="changeHP(0,5)">+5</button>
+            <button class="heal" onclick="changeHP(0,10)">+10</button>
+            <button class="heal" onclick="changeHP(0,20)">+20</button>
+            <button class="heal" onclick="changeHP(0,40)">+40</button>
 
-                <button
-                    class="heal"
-                    onclick="changeHP(0, 5)">
-                    +5
-                </button>
+        </div>
 
-                <button
-                    class="heal"
-                    onclick="changeHP(0, 10)">
-                    +10
-                </button>
+        <div class="extra-controls">
 
-                <button
-                    class="heal"
-                    onclick="changeHP(0, 20)">
-                    +20
-                </button>
+            <button class="max-btn" onclick="maxHP(0)">
+                MAX HP
+            </button>
 
-            </div>
-
-            <button
-                class="reset"
-                onclick="resetHP(0)">
-                СБРОСИТЬ — 200 HP
+            <button class="reset-player" onclick="resetPlayer(0)">
+                СБРОС
             </button>
 
         </div>
 
+        <div class="last-change" id="change-0"></div>
 
-
-        <!-- АЛХИМИК -->
-
-        <div class="player" id="player1">
-
-            <div class="player-name">
-                Алхимик
-            </div>
-
-            <div class="player-number">
-                ИГРОК 2
-            </div>
-
-            <div class="hp" id="hp1">
-                200
-            </div>
-
-            <div class="hp-label">
-                HP
-            </div>
-
-            <div class="hp-bar">
-                <div
-                    class="hp-fill"
-                    id="bar1">
-                </div>
-            </div>
-
-            <div class="buttons">
-
-                <button
-                    class="damage"
-                    onclick="changeHP(1, -20)">
-                    −20
-                </button>
-
-                <button
-                    class="damage"
-                    onclick="changeHP(1, -10)">
-                    −10
-                </button>
-
-                <button
-                    class="damage"
-                    onclick="changeHP(1, -5)">
-                    −5
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(1, 5)">
-                    +5
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(1, 10)">
-                    +10
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(1, 20)">
-                    +20
-                </button>
-
-            </div>
-
-            <button
-                class="reset"
-                onclick="resetHP(1)">
-                СБРОСИТЬ — 200 HP
-            </button>
-
-        </div>
-
-
-
-        <!-- ТЕНЕВИК -->
-
-        <div class="player" id="player2">
-
-            <div class="player-name">
-                Теневик
-            </div>
-
-            <div class="player-number">
-                ИГРОК 3
-            </div>
-
-            <div class="hp" id="hp2">
-                200
-            </div>
-
-            <div class="hp-label">
-                HP
-            </div>
-
-            <div class="hp-bar">
-                <div
-                    class="hp-fill"
-                    id="bar2">
-                </div>
-            </div>
-
-            <div class="buttons">
-
-                <button
-                    class="damage"
-                    onclick="changeHP(2, -20)">
-                    −20
-                </button>
-
-                <button
-                    class="damage"
-                    onclick="changeHP(2, -10)">
-                    −10
-                </button>
-
-                <button
-                    class="damage"
-                    onclick="changeHP(2, -5)">
-                    −5
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(2, 5)">
-                    +5
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(2, 10)">
-                    +10
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(2, 20)">
-                    +20
-                </button>
-
-            </div>
-
-            <button
-                class="reset"
-                onclick="resetHP(2)">
-                СБРОСИТЬ — 200 HP
-            </button>
-
-        </div>
-
-
-
-        <!-- ДИКТАТОР -->
-
-        <div class="player" id="player3">
-
-            <div class="player-name">
-                Диктатор
-            </div>
-
-            <div class="player-number">
-                ИГРОК 4
-            </div>
-
-            <div class="hp" id="hp3">
-                200
-            </div>
-
-            <div class="hp-label">
-                HP
-            </div>
-
-            <div class="hp-bar">
-                <div
-                    class="hp-fill"
-                    id="bar3">
-                </div>
-            </div>
-
-            <div class="buttons">
-
-                <button
-                    class="damage"
-                    onclick="changeHP(3, -20)">
-                    −20
-                </button>
-
-                <button
-                    class="damage"
-                    onclick="changeHP(3, -10)">
-                    −10
-                </button>
-
-                <button
-                    class="damage"
-                    onclick="changeHP(3, -5)">
-                    −5
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(3, 5)">
-                    +5
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(3, 10)">
-                    +10
-                </button>
-
-                <button
-                    class="heal"
-                    onclick="changeHP(3, 20)">
-                    +20
-                </button>
-
-            </div>
-
-            <button
-                class="reset"
-                onclick="resetHP(3)">
-                СБРОСИТЬ — 200 HP
-            </button>
-
+        <div class="dead-message">
+            ☠ ИГРОК ПОГИБ ☠
         </div>
 
     </div>
 
 
-    <div class="footer">
-        НОКСБУРГ • СИНДИКАТ • ПОСЛЕДНИЙ ЗЛОДЕЙ
+    <!-- АЛХИМИК -->
+
+    <div class="player" id="player-1">
+
+        <div class="name">
+            Алхимик
+        </div>
+
+        <div class="hp-row">
+
+            <div class="hp">
+                <span id="hp-1">200</span>
+                <span class="max">/ 200 HP</span>
+            </div>
+
+            <div class="status" id="status-1">
+                ЗДОРОВ
+            </div>
+
+        </div>
+
+        <div class="hp-bar">
+            <div class="hp-fill green" id="bar-1"></div>
+        </div>
+
+        <div class="controls">
+
+            <button class="damage" onclick="changeHP(1,-5)">−5</button>
+            <button class="damage" onclick="changeHP(1,-10)">−10</button>
+            <button class="damage" onclick="changeHP(1,-20)">−20</button>
+            <button class="damage" onclick="changeHP(1,-40)">−40</button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(1,5)">+5</button>
+            <button class="heal" onclick="changeHP(1,10)">+10</button>
+            <button class="heal" onclick="changeHP(1,20)">+20</button>
+            <button class="heal" onclick="changeHP(1,40)">+40</button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="max-btn" onclick="maxHP(1)">
+                MAX HP
+            </button>
+
+            <button class="reset-player" onclick="resetPlayer(1)">
+                СБРОС
+            </button>
+
+        </div>
+
+        <div class="last-change" id="change-1"></div>
+
+        <div class="dead-message">
+            ☠ ИГРОК ПОГИБ ☠
+        </div>
+
     </div>
+
+
+    <!-- ТЕНЕВИК -->
+
+    <div class="player" id="player-2">
+
+        <div class="name">
+            Теневик
+        </div>
+
+        <div class="hp-row">
+
+            <div class="hp">
+                <span id="hp-2">200</span>
+                <span class="max">/ 200 HP</span>
+            </div>
+
+            <div class="status" id="status-2">
+                ЗДОРОВ
+            </div>
+
+        </div>
+
+        <div class="hp-bar">
+            <div class="hp-fill green" id="bar-2"></div>
+        </div>
+
+        <div class="controls">
+
+            <button class="damage" onclick="changeHP(2,-5)">−5</button>
+            <button class="damage" onclick="changeHP(2,-10)">−10</button>
+            <button class="damage" onclick="changeHP(2,-20)">−20</button>
+            <button class="damage" onclick="changeHP(2,-40)">−40</button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(2,5)">+5</button>
+            <button class="heal" onclick="changeHP(2,10)">+10</button>
+            <button class="heal" onclick="changeHP(2,20)">+20</button>
+            <button class="heal" onclick="changeHP(2,40)">+40</button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="max-btn" onclick="maxHP(2)">
+                MAX HP
+            </button>
+
+            <button class="reset-player" onclick="resetPlayer(2)">
+                СБРОС
+            </button>
+
+        </div>
+
+        <div class="last-change" id="change-2"></div>
+
+        <div class="dead-message">
+            ☠ ИГРОК ПОГИБ ☠
+        </div>
+
+    </div>
+
+
+    <!-- ДИКТАТОР -->
+
+    <div class="player" id="player-3">
+
+        <div class="name">
+            Диктатор
+        </div>
+
+        <div class="hp-row">
+
+            <div class="hp">
+                <span id="hp-3">200</span>
+                <span class="max">/ 200 HP</span>
+            </div>
+
+            <div class="status" id="status-3">
+                ЗДОРОВ
+            </div>
+
+        </div>
+
+        <div class="hp-bar">
+            <div class="hp-fill green" id="bar-3"></div>
+        </div>
+
+        <div class="controls">
+
+            <button class="damage" onclick="changeHP(3,-5)">−5</button>
+            <button class="damage" onclick="changeHP(3,-10)">−10</button>
+            <button class="damage" onclick="changeHP(3,-20)">−20</button>
+            <button class="damage" onclick="changeHP(3,-40)">−40</button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(3,5)">+5</button>
+            <button class="heal" onclick="changeHP(3,10)">+10</button>
+            <button class="heal" onclick="changeHP(3,20)">+20</button>
+            <button class="heal" onclick="changeHP(3,40)">+40</button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="max-btn" onclick="maxHP(3)">
+                MAX HP
+            </button>
+
+            <button class="reset-player" onclick="resetPlayer(3)">
+                СБРОС
+            </button>
+
+        </div>
+
+        <div class="last-change" id="change-3"></div>
+
+        <div class="dead-message">
+            ☠ ИГРОК ПОГИБ ☠
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="global-controls">
+
+    <button onclick="resetAll()">
+        🔄 СБРОСИТЬ ВСЕХ
+    </button>
+
+</div>
 
 
 <script>
 
-    /*
-       Начальное HP всех игроков
-    */
+const MAX_HP = 200;
 
-    const MAX_HP = 200;
+const players = [
+    "Кукловод",
+    "Алхимик",
+    "Теневик",
+    "Диктатор"
+];
 
-    let hp = [
-        200,
-        200,
-        200,
-        200
+
+/* -------------------------
+   LOAD HP
+------------------------- */
+
+let hp = JSON.parse(
+    localStorage.getItem("lastVillainHP")
+) || [200,200,200,200];
+
+
+/* -------------------------
+   UPDATE
+------------------------- */
+
+function updatePlayer(id) {
+
+    let value = hp[id];
+
+    const hpText =
+        document.getElementById(`hp-${id}`);
+
+    const bar =
+        document.getElementById(`bar-${id}`);
+
+    const status =
+        document.getElementById(`status-${id}`);
+
+    const player =
+        document.getElementById(`player-${id}`);
+
+    const percentage =
+        (value / MAX_HP) * 100;
+
+
+    hpText.textContent = value;
+
+    bar.style.width =
+        percentage + "%";
+
+
+    /* remove old colors */
+
+    bar.classList.remove(
+        "green",
+        "yellow",
+        "red",
+        "dead"
+    );
+
+    player.classList.remove(
+        "low",
+        "dead"
+    );
+
+
+    /* -------------------------
+       HP STATES
+    ------------------------- */
+
+    if (value <= 0) {
+
+        bar.classList.add("dead");
+
+        status.textContent =
+            "ПОГИБ";
+
+        player.classList.add("dead");
+
+    }
+
+    else if (percentage < 30) {
+
+        bar.classList.add("red");
+
+        status.textContent =
+            "КРИТИЧЕСКОЕ HP";
+
+        player.classList.add("low");
+
+    }
+
+    else if (percentage < 60) {
+
+        bar.classList.add("yellow");
+
+        status.textContent =
+            "ОПАСНО";
+
+    }
+
+    else {
+
+        bar.classList.add("green");
+
+        status.textContent =
+            "ЗДОРОВ";
+
+    }
+
+
+    /* save */
+
+    localStorage.setItem(
+        "lastVillainHP",
+        JSON.stringify(hp)
+    );
+}
+
+
+/* -------------------------
+   CHANGE HP
+------------------------- */
+
+function changeHP(id, amount) {
+
+    const oldHP = hp[id];
+
+    hp[id] += amount;
+
+    hp[id] =
+        Math.max(
+            0,
+            Math.min(MAX_HP, hp[id])
+        );
+
+
+    const difference =
+        hp[id] - oldHP;
+
+
+    if (difference > 0) {
+
+        document.getElementById(
+            `change-${id}`
+        ).textContent =
+            `▲ +${difference} HP`;
+
+    }
+
+    else if (difference < 0) {
+
+        document.getElementById(
+            `change-${id}`
+        ).textContent =
+            `▼ ${Math.abs(difference)} HP`;
+
+    }
+
+    else {
+
+        document.getElementById(
+            `change-${id}`
+        ).textContent =
+            `HP не изменилось`;
+
+    }
+
+
+    updatePlayer(id);
+}
+
+
+/* -------------------------
+   MAX HP
+------------------------- */
+
+function maxHP(id) {
+
+    hp[id] = MAX_HP;
+
+    document.getElementById(
+        `change-${id}`
+    ).textContent =
+        "♥ HP восстановлено полностью";
+
+    updatePlayer(id);
+}
+
+
+/* -------------------------
+   RESET PLAYER
+------------------------- */
+
+function resetPlayer(id) {
+
+    hp[id] = MAX_HP;
+
+    document.getElementById(
+        `change-${id}`
+    ).textContent =
+        "↻ Игрок сброшен";
+
+    updatePlayer(id);
+}
+
+
+/* -------------------------
+   RESET ALL
+------------------------- */
+
+function resetAll() {
+
+    const confirmed =
+        confirm(
+            "Сбросить HP всех игроков до 200?"
+        );
+
+    if (!confirmed) return;
+
+
+    hp = [
+        MAX_HP,
+        MAX_HP,
+        MAX_HP,
+        MAX_HP
     ];
 
 
-    /*
-       Изменение HP
-    */
+    players.forEach((_, id) => {
 
-    function changeHP(player, amount) {
+        document.getElementById(
+            `change-${id}`
+        ).textContent =
+            "↻ Все игроки восстановлены";
 
-        hp[player] += amount;
+        updatePlayer(id);
 
+    });
 
-        /*
-           HP не может быть меньше 0
-        */
-
-        if (hp[player] < 0) {
-            hp[player] = 0;
-        }
+}
 
 
-        /*
-           HP не может быть больше 200
-        */
+/* -------------------------
+   INITIALIZE
+------------------------- */
 
-        if (hp[player] > MAX_HP) {
-            hp[player] = MAX_HP;
-        }
+players.forEach((_, id) => {
 
+    updatePlayer(id);
 
-        updatePlayer(player);
-    }
-
-
-    /*
-       Сброс HP
-    */
-
-    function resetHP(player) {
-
-        hp[player] = MAX_HP;
-
-        updatePlayer(player);
-    }
-
-
-    /*
-       Обновление игрока
-    */
-
-    function updatePlayer(player) {
-
-        const hpText =
-            document.getElementById(
-                "hp" + player
-            );
-
-        const hpBar =
-            document.getElementById(
-                "bar" + player
-            );
-
-        const playerCard =
-            document.getElementById(
-                "player" + player
-            );
-
-
-        /*
-           Обновляем цифру
-        */
-
-        hpText.textContent = hp[player];
-
-
-        /*
-           Обновляем шкалу
-        */
-
-        const percent =
-            (hp[player] / MAX_HP) * 100;
-
-        hpBar.style.width =
-            percent + "%";
-
-
-        /*
-           Цвет шкалы в зависимости от HP
-        */
-
-        if (hp[player] <= 50) {
-
-            hpBar.style.background =
-                "#7d1515";
-
-        }
-        else if (hp[player] <= 100) {
-
-            hpBar.style.background =
-                "#a96b18";
-
-        }
-        else {
-
-            hpBar.style.background =
-                "linear-gradient(90deg, #7d1515, #c52c2c)";
-        }
-
-
-        /*
-           Если HP = 0,
-           игрок считается выбывшим
-        */
-
-        if (hp[player] === 0) {
-
-            playerCard.classList.add("dead");
-
-        }
-        else {
-
-            playerCard.classList.remove("dead");
-
-        }
-
-    }
-
-
-    /*
-       Первоначальное обновление
-    */
-
-    for (let i = 0; i < 4; i++) {
-
-        updatePlayer(i);
-
-    }
+});
 
 </script>
 
