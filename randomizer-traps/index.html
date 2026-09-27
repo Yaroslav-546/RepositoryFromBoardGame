@@ -119,6 +119,7 @@
             width: 100%;
             max-width: 360px;
             max-height: 360px;
+            min-height: 360px;
             height: auto;
 
             display: block;
@@ -381,23 +382,6 @@
 
 /* =========================================
    КАРТИНКИ ЛОВУШЕК
-
-   Папка:
-   images/traps/
-
-   Файлы:
-   01_wrong_path.png
-   02_theft.png
-   03_scary_alley.png
-   04_dead_end.png
-   05_bear_trap.png
-   06_dark_alley.png
-   07_bloody_trail.png
-   08_time_trap.png
-   09_panic.png
-
-   Исходный размер:
-   1244 × 1265
 ========================================= */
 
 
@@ -431,7 +415,6 @@ const cardImages = {
         "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/traps/09_panic.png"
 
 };
-
 
 
 /* =========================================
@@ -515,13 +498,37 @@ const traps = [
 ];
 
 
-
 /* =========================================
-   КОЛОДА
+   СОХРАНЕНИЕ
 ========================================= */
 
 
+/*
+   Уникальный ключ сохранения.
+
+   Он хранится отдельно от генератора событий,
+   поэтому колоды друг другу не мешают.
+*/
+
+const STORAGE_KEY =
+    "posledniy_zlodey_trap_randomizer";
+
+
+/*
+   Текущая колода.
+
+   В ней хранятся индексы ловушек,
+   а не сами объекты.
+*/
+
 let deck = [];
+
+
+/*
+   Индекс последней вытянутой ловушки.
+*/
+
+let lastTrapIndex = null;
 
 
 
@@ -537,7 +544,8 @@ function secureRandomInt(max) {
     }
 
 
-    const maxUint32 = 0x100000000;
+    const maxUint32 =
+        0x100000000;
 
 
     const limit =
@@ -556,7 +564,8 @@ function secureRandomInt(max) {
 
         crypto.getRandomValues(array);
 
-        randomNumber = array[0];
+        randomNumber =
+            array[0];
 
     }
 
@@ -578,7 +587,8 @@ function secureRandomInt(max) {
 
 function shuffle(array) {
 
-    const result = [...array];
+    const result =
+        [...array];
 
 
     for (
@@ -616,9 +626,213 @@ function shuffle(array) {
 
 function createDeck() {
 
-    deck = shuffle(traps);
+    /*
+       Создаём массив:
+
+       [0,1,2,3,4,5,6,7,8]
+
+       и перемешиваем его.
+    */
+
+    deck =
+        shuffle(
+            traps.map(
+                (_, index) => index
+            )
+        );
+
+
+    /*
+       Последней карты больше нет.
+    */
+
+    lastTrapIndex =
+        null;
+
+
+    /*
+       Сохраняем новую колоду.
+    */
+
+    saveGame();
+
 
     updateCounter();
+
+}
+
+
+
+/* =========================================
+   СОХРАНЕНИЕ ИГРЫ
+========================================= */
+
+
+function saveGame() {
+
+    const gameState = {
+
+        /*
+           Оставшиеся карты.
+        */
+
+        deck: deck,
+
+
+        /*
+           Последняя вытянутая карта.
+        */
+
+        lastTrapIndex:
+            lastTrapIndex
+
+    };
+
+
+    localStorage.setItem(
+
+        STORAGE_KEY,
+
+        JSON.stringify(gameState)
+
+    );
+
+}
+
+
+
+/* =========================================
+   ЗАГРУЗКА СОХРАНЕНИЯ
+========================================= */
+
+
+function loadGame() {
+
+    const saved =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
+
+
+    /*
+       Если сохранения нет —
+       создаём новую колоду.
+    */
+
+    if (!saved) {
+
+        createDeck();
+
+        return;
+    }
+
+
+    try {
+
+        const gameState =
+            JSON.parse(saved);
+
+
+        /*
+           Проверяем, что deck действительно массив.
+        */
+
+        if (
+            !Array.isArray(gameState.deck)
+        ) {
+
+            createDeck();
+
+            return;
+        }
+
+
+        /*
+           Проверяем индексы карт.
+        */
+
+        const validDeck =
+            gameState.deck.every(
+                index =>
+                    Number.isInteger(index)
+                    &&
+                    index >= 0
+                    &&
+                    index < traps.length
+            );
+
+
+        if (!validDeck) {
+
+            createDeck();
+
+            return;
+        }
+
+
+        /*
+           Восстанавливаем колоду.
+        */
+
+        deck =
+            gameState.deck;
+
+
+        /*
+           Восстанавливаем последнюю карту.
+        */
+
+        if (
+            Number.isInteger(
+                gameState.lastTrapIndex
+            )
+            &&
+            gameState.lastTrapIndex >= 0
+            &&
+            gameState.lastTrapIndex < traps.length
+        ) {
+
+            lastTrapIndex =
+                gameState.lastTrapIndex;
+
+
+            /*
+               Сразу показываем
+               последнюю вытянутую ловушку.
+            */
+
+            showCard(
+                traps[lastTrapIndex]
+            );
+
+        }
+
+
+        /*
+           Обновляем счётчик.
+        */
+
+        updateCounter();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Ошибка загрузки сохранения:",
+            error
+        );
+
+
+        /*
+           Если сохранение повреждено —
+           создаём новую колоду.
+        */
+
+        createDeck();
+
+    }
 
 }
 
@@ -634,6 +848,7 @@ function updateCounter() {
     document.getElementById(
         "counter"
     ).textContent =
+
         `Осталось ловушек: ${deck.length}`;
 
 }
@@ -641,28 +856,11 @@ function updateCounter() {
 
 
 /* =========================================
-   ВЫТЯНУТЬ ЛОВУШКУ
+   ПОКАЗАТЬ КАРТУ
 ========================================= */
 
 
-function drawCard() {
-
-
-    /*
-       Если все 9 ловушек уже вытянуты,
-       автоматически создаётся новая колода.
-    */
-
-    if (deck.length === 0) {
-        createDeck();
-    }
-
-
-    const trap = deck.pop();
-
-
-    updateCounter();
-
+function showCard(trap) {
 
     const imagePath =
         cardImages[trap.name];
@@ -708,6 +906,74 @@ function drawCard() {
 
 
 /* =========================================
+   ВЫТЯНУТЬ ЛОВУШКУ
+========================================= */
+
+
+function drawCard() {
+
+    /*
+       Если все 9 ловушек закончились,
+       автоматически создаём новую колоду.
+    */
+
+    if (deck.length === 0) {
+
+        createDeck();
+
+    }
+
+
+    /*
+       Берём одну карту.
+    */
+
+    const trapIndex =
+        deck.pop();
+
+
+    const trap =
+        traps[trapIndex];
+
+
+    /*
+       Запоминаем последнюю карту.
+    */
+
+    lastTrapIndex =
+        trapIndex;
+
+
+    /*
+       Показываем карту.
+    */
+
+    showCard(trap);
+
+
+    /*
+       Обновляем счётчик.
+    */
+
+    updateCounter();
+
+
+    /*
+       Сохраняем состояние.
+
+       Теперь после F5, закрытия браузера
+       или повторного открытия сайта
+       эта карта уже не вернётся
+       в текущую колоду.
+    */
+
+    saveGame();
+
+}
+
+
+
+/* =========================================
    ОШИБКА КАРТИНКИ
 ========================================= */
 
@@ -741,15 +1007,34 @@ function imageError(image) {
 
 function resetDeck() {
 
+    /*
+       Удаляем старое сохранение.
+    */
+
+    localStorage.removeItem(
+        STORAGE_KEY
+    );
+
+
+    /*
+       Создаём новую колоду.
+    */
+
     createDeck();
 
+
+    /*
+       Показываем начальную заглушку.
+    */
 
     document.getElementById(
         "cardContainer"
     ).innerHTML = `
 
         <div class="placeholder">
+
             Нажми «Вытянуть ловушку»
+
         </div>
 
     `;
@@ -763,12 +1048,12 @@ function resetDeck() {
 ========================================= */
 
 
-createDeck();
+/*
+   Вместо createDeck()
+   теперь загружаем сохранение.
+*/
+
+loadGame();
 
 
 </script>
-
-
-</body>
-
-</html>

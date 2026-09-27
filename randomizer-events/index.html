@@ -1,144 +1,231 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Рандомизатор карт событий</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Рандомизатор событий</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
 
+
         body {
             margin: 0;
+
             min-height: 100vh;
+
             font-family: Arial, sans-serif;
+
             background:
-                radial-gradient(circle at top, #252525 0%, #111 45%, #080808 100%);
+                radial-gradient(
+                    circle at top,
+                    #252525 0%,
+                    #111 45%,
+                    #080808 100%
+                );
+
             color: white;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             padding: 20px;
         }
 
+
         .game {
             width: 100%;
+
             max-width: 700px;
+
             text-align: center;
         }
 
+
         h1 {
             margin: 0 0 8px;
+
             font-size: 32px;
         }
 
+
         .subtitle {
             color: #aaa;
+
             margin-bottom: 20px;
         }
+
 
         .counter {
             display: inline-block;
+
             padding: 8px 16px;
+
             margin-bottom: 20px;
+
             border-radius: 20px;
+
             background: #222;
+
             color: #ccc;
+
             font-size: 14px;
         }
 
-        /* ОБЛАСТЬ КАРТЫ */
+
+        /* =====================================
+           ОБЛАСТЬ КАРТЫ
+        ===================================== */
 
         .card-container {
             width: 100%;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             margin-bottom: 25px;
         }
 
+
         .card {
             width: 360px;
+
             max-width: 100%;
+
             background: #151515;
+
             border-radius: 14px;
+
             overflow: hidden;
+
             box-shadow:
                 0 15px 40px rgba(0, 0, 0, 0.6),
                 0 0 0 1px rgba(255,255,255,0.08);
         }
 
-        /*
-            ВАЖНО:
-            Карта имеет размер 360x327.
-            Никакого cover — иначе изображение обрежется.
-        */
+
+        /* =====================================
+           КАРТИНКА СОБЫТИЯ
+
+           Картинки не обрезаются.
+        ===================================== */
 
         .card-image {
             width: 100%;
+
             max-width: 360px;
+
+            max-height: 360px;
+
             height: auto;
+
             display: block;
+
             margin: 0 auto;
+
             object-fit: contain;
         }
+
 
         .card-info {
             padding: 18px;
         }
 
+
         .card-title {
             font-size: 25px;
+
             font-weight: bold;
+
             margin-bottom: 10px;
         }
 
+
         .card-description {
             color: #ccc;
+
             line-height: 1.5;
+
             font-size: 16px;
         }
+
+
+        /* =====================================
+           ЗАГЛУШКА
+        ===================================== */
 
         .placeholder {
             width: 360px;
-            max-width: 100%;
-            min-height: 327px;
 
+            max-width: 100%;
+
+            max-height: 360px;
+            min-height: 360px;
             display: flex;
+
             justify-content: center;
+
             align-items: center;
 
             border-radius: 14px;
+
             background: #181818;
+
             border: 2px dashed #444;
 
             color: #777;
+
             font-size: 18px;
+
+            padding: 20px;
         }
 
-        /* КНОПКИ */
+
+        /* =====================================
+           КНОПКИ
+        ===================================== */
 
         .buttons {
             display: flex;
+
             justify-content: center;
+
             gap: 12px;
+
             flex-wrap: wrap;
         }
 
+
         button {
             border: none;
+
             border-radius: 10px;
+
             padding: 14px 24px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
 
             background: #e5e5e5;
+
             color: #111;
 
             transition:
@@ -146,43 +233,64 @@
                 background 0.15s;
         }
 
+
         button:hover {
             transform: translateY(-2px);
+
             background: white;
         }
+
 
         button:active {
             transform: translateY(0);
         }
 
+
         .reset-button {
             background: #292929;
+
             color: white;
         }
+
 
         .reset-button:hover {
             background: #383838;
         }
 
-        /* АНИМАЦИЯ */
+
+        /* =====================================
+           АНИМАЦИЯ
+        ===================================== */
 
         .card.appear {
             animation: appear 0.35s ease;
         }
 
+
         @keyframes appear {
+
             from {
                 opacity: 0;
-                transform: scale(0.96) translateY(10px);
+
+                transform:
+                    scale(0.96)
+                    translateY(10px);
             }
 
             to {
                 opacity: 1;
-                transform: scale(1) translateY(0);
+
+                transform:
+                    scale(1)
+                    translateY(0);
             }
+
         }
 
-        /* МОБИЛЬНАЯ ВЕРСИЯ */
+
+        /* =====================================
+           МОБИЛЬНАЯ ВЕРСИЯ
+        ===================================== */
 
         @media (max-width: 500px) {
 
@@ -190,60 +298,87 @@
                 padding: 12px;
             }
 
+
             h1 {
                 font-size: 25px;
             }
 
+
             .card {
-                width: 360px;
-                max-width: 100%;
+                width: 100%;
+
+                max-width: 360px;
             }
+
 
             .card-image {
                 width: 100%;
+
                 height: auto;
             }
 
+
             .placeholder {
                 width: 100%;
-                min-height: 280px;
+
+                min-height: 300px;
             }
+
 
             button {
                 width: 100%;
+
                 max-width: 360px;
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="game">
 
-    <h1>🎴 Рандомизатор событий</h1>
+    <h1>
+        🎴 Рандомизатор событий
+    </h1>
+
 
     <div class="subtitle">
         «Последний злодей»
     </div>
 
-    <div class="counter" id="counter">
-        Осталось карт: 11
+
+    <div
+        class="counter"
+        id="counter"
+    >
+        Осталось событий: 12
     </div>
 
-    <div class="card-container" id="cardContainer">
+
+    <div
+        class="card-container"
+        id="cardContainer"
+    >
 
         <div class="placeholder">
-            Нажми «Вытянуть карту»
+            Нажми «Вытянуть событие»
         </div>
 
     </div>
 
+
     <div class="buttons">
 
         <button onclick="drawCard()">
-            🎴 Вытянуть карту
+            🎴 Вытянуть событие
         </button>
+
 
         <button
             class="reset-button"
@@ -254,377 +389,650 @@
 
     </div>
 
+
 </div>
 
 
 <script>
 
+
+/* =========================================
+   КАРТИНКИ СОБЫТИЙ
+
+   Папка:
+   images/events/
+
+   Файлы:
+
+   01_city_panic.png
+   02_heist.png
+   03_betrayal.png
+   04_lucky_break.png
+   05_double_move.png
+   06_emergency_shutdown.png
+   07_chase.png
+   08_ambulance.png
+   09_roundup.png
+   10_shortcut.png
+   11_black_day.png
+   12_setup.png
+
+========================================= */
+
+
+const cardImages = {
+
+    "Городская паника":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/01_city_panic.png",
+
+    "Кража века":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/02_heist.png",
+
+    "Предательство":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/03_betrayal.png",
+
+    "Счастливый случай":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/04_lucky_break.png",
+
+    "Двойной ход":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/05_double_move.png",
+
+    "Аварийное отключение":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/06_emergency_shutdown.png",
+
+    "Погоня":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/07_chase.png",
+
+    "Скорая помощь":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/08_ambulance.png",
+
+    "Облава":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/09_roundup.png",
+
+    "Короткий путь":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/10_shortcut.png",
+
+    "Чёрный день":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/11_black_day.png",
+
+    "Подстава":
+        "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/12_setup.png"
+
+};
+
+
+/* =========================================
+   СОБЫТИЯ
+========================================= */
+
+
+const events = [
+
+    {
+        name: "Городская паника",
+
+        description:
+            "Все игроки, кроме тебя, теряют <b>20 HP</b>."
+    },
+
+
+    {
+        name: "Кража века",
+
+        description:
+            "Выбери любого игрока. Он теряет <b>20 HP</b>, а ты восстанавливаешь <b>20 HP</b>."
+    },
+
+
+    {
+        name: "Предательство",
+
+        description:
+            "Выбери игрока. При его следующем попадании на ловушку <b>ловушка наносит ему двойной эффект</b>."
+    },
+
+
+    {
+        name: "Счастливый случай",
+
+        description:
+            "Восстанови <b>40 HP</b>."
+    },
+
+
+    {
+        name: "Двойной ход",
+
+        description:
+            "Сразу после окончания своего хода <b>брось кубик ещё раз</b> и сделай дополнительный ход."
+    },
+
+
+    {
+        name: "Аварийное отключение",
+
+        description:
+            "До начала твоего следующего хода эффект следующей специальной клетки, на которую ты попадёшь, <b>не действует</b>."
+    },
+
+
+    {
+        name: "Погоня",
+
+        description:
+            "Выбери игрока. Он <b>отступает на 3 клетки назад</b>."
+    },
+
+
+    {
+        name: "Скорая помощь",
+
+        description:
+            "Восстанови <b>25 HP</b>. Если у тебя меньше 30 HP, восстанови <b>40 HP</b>."
+    },
+
+
+    {
+        name: "Облава",
+
+        description:
+            "Все игроки, кроме тебя, <b>отступают на 1 клетку</b>."
+    },
+
+
+    {
+        name: "Короткий путь",
+
+        description:
+            "Переместись <b>вперёд на 3 клетки</b>, но эффект клетки назначения всё равно срабатывает."
+    },
+
+
+    {
+        name: "Чёрный день",
+
+        description:
+            "Все игроки с <b>50 HP и больше</b> теряют <b>15 HP</b>."
+    },
+
+
+    {
+        name: "Подстава",
+
+        description:
+            "Перемести одну ловушку на <b>любую другую территорию</b>."
+    }
+
+];
+
+
+/* =========================================
+   СОХРАНЕНИЕ
+
+   Состояние колоды сохраняется
+   даже после перезагрузки страницы.
+========================================= */
+
+
+const STORAGE_KEY =
+    "posledniy_zlodey_event_randomizer";
+
+
+let deck = [];
+
+let lastEventIndex = null;
+
+
+/* =========================================
+   БЕЗОПАСНОЕ СЛУЧАЙНОЕ ЧИСЛО
+========================================= */
+
+
+function secureRandomInt(max) {
+
+    if (max <= 0) {
+        throw new Error("Invalid max value");
+    }
+
+
+    const maxUint32 =
+        0x100000000;
+
+
+    const limit =
+        maxUint32 -
+        (maxUint32 % max);
+
+
+    const array =
+        new Uint32Array(1);
+
+
+    let randomNumber;
+
+
+    do {
+
+        crypto.getRandomValues(array);
+
+        randomNumber =
+            array[0];
+
+    }
+
+    while (
+        randomNumber >= limit
+    );
+
+
+    return randomNumber % max;
+
+}
+
+
+/* =========================================
+   ПЕРЕМЕШИВАНИЕ
+========================================= */
+
+
+function shuffle(array) {
+
+    const result =
+        [...array];
+
+
+    for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            secureRandomInt(i + 1);
+
+
+        [
+            result[i],
+            result[j]
+        ] =
+        [
+            result[j],
+            result[i]
+        ];
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================
+   СОЗДАНИЕ НОВОЙ КОЛОДЫ
+========================================= */
+
+
+function createDeck() {
+
     /*
-    ==========================================
-    КАРТИНКИ
-    ==========================================
+        В колоде хранятся индексы событий,
+        а не сами объекты.
     */
 
-    const cardImages = {
-        "Городская паника":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/01_city_panic.png",
+    deck =
+        shuffle(
+            events.map(
+                (_, index) => index
+            )
+        );
 
-        "Кража века":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/02_heist.png",
 
-        "Предательство":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/03_betrayal.png",
+    lastEventIndex =
+        null;
 
-        "Чёрный рынок":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/04_black_market.png",
 
-        "Счастливый случай":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/05_lucky_break.png",
+    saveGame();
 
-        "Двойной ход":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/06_double_move.png",
+    updateCounter();
 
-        "Полицейский рейд":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/07_police_raid.png",
+}
 
-        "Подстава":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/08_setup.png",
 
-        "Облава":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/09_roundup.png",
+/* =========================================
+   СОХРАНЕНИЕ ИГРЫ
+========================================= */
 
-        "Короткий путь":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/10_shortcut.png",
 
-        "Чёрный день":
-            "https://yaroslav-546.github.io/RepositoryFromBoardGame/images/events/11_black_day.png"
+function saveGame() {
+
+    const gameState = {
+
+        deck: deck,
+
+        lastEventIndex:
+            lastEventIndex
 
     };
 
 
-    /*
-    ==========================================
-    КАРТЫ
-    ==========================================
-    */
+    localStorage.setItem(
 
-    const events = [
+        STORAGE_KEY,
 
-        {
-            name: "Городская паника",
-            description:
-                "Все игроки, кроме тебя, теряют <b>20 HP</b>."
-        },
+        JSON.stringify(gameState)
 
-        {
-            name: "Кража века",
-            description:
-                "Выбери любого игрока. Он теряет <b>20 HP</b>, а ты восстанавливаешь <b>20 HP</b>."
-        },
+    );
 
-        {
-            name: "Предательство",
-            description:
-                "Выбери игрока. При его следующем попадании на ловушку ловушка наносит ему <b>двойной эффект</b>."
-        },
+}
 
-        {
-            name: "Чёрный рынок",
-            description:
-                "Восстанови <b>25 HP</b>."
-        },
 
-        {
-            name: "Счастливый случай",
-            description:
-                "Восстанови <b>40 HP</b>."
-        },
+/* =========================================
+   ЗАГРУЗКА ИГРЫ
+========================================= */
 
-        {
-            name: "Двойной ход",
-            description:
-                "Сразу после окончания своего хода брось кубик ещё раз и сделай дополнительный ход."
-        },
 
-        {
-            name: "Полицейский рейд",
-            description:
-                "Выбранная территория временно перестаёт наносить урон."
-        },
+function loadGame() {
 
-        {
-            name: "Подстава",
-            description:
-                "Перемести одну из своих ловушек на любую другую территорию."
-        },
-
-        {
-            name: "Облава",
-            description:
-                "Все игроки, находящиеся впереди тебя на маршруте, отступают на <b>1 клетку</b>."
-        },
-
-        {
-            name: "Короткий путь",
-            description:
-                "Переместись вперёд на <b>3 клетки</b>, но эффект клетки назначения всё равно срабатывает."
-        },
-
-        {
-            name: "Чёрный день",
-            description:
-                "Все игроки с <b>50 HP</b> и больше теряют <b>15 HP</b>."
-        }
-
-    ];
+    const saved =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
 
 
     /*
-    ==========================================
-    КОЛОДА
-    ==========================================
+        Если сохранения нет,
+        создаём новую колоду.
     */
 
-    let deck = [];
+    if (!saved) {
 
+        createDeck();
 
-    /*
-    ==========================================
-    НАСТОЯЩАЯ СЛУЧАЙНОСТЬ
-    ==========================================
-    */
-
-    function secureRandomInt(max) {
-
-        if (max <= 0) {
-            throw new Error("Invalid max value");
-        }
-
-        const maxUint32 = 0x100000000;
-
-        const limit =
-            maxUint32 - (maxUint32 % max);
-
-        const array =
-            new Uint32Array(1);
-
-        let randomNumber;
-
-        do {
-
-            crypto.getRandomValues(array);
-
-            randomNumber = array[0];
-
-        } while (randomNumber >= limit);
-
-        return randomNumber % max;
+        return;
     }
 
 
-    /*
-    ==========================================
-    ПЕРЕМЕШИВАНИЕ
-    ==========================================
-    */
+    try {
 
-    function shuffle(array) {
+        const gameState =
+            JSON.parse(saved);
 
-        const result = [...array];
-
-        for (
-            let i = result.length - 1;
-            i > 0;
-            i--
-        ) {
-
-            const j =
-                secureRandomInt(i + 1);
-
-            [
-                result[i],
-                result[j]
-            ] =
-            [
-                result[j],
-                result[i]
-            ];
-        }
-
-        return result;
-    }
-
-
-    /*
-    ==========================================
-    СОЗДАНИЕ КОЛОДЫ
-    ==========================================
-    */
-
-    function createDeck() {
-
-        deck = shuffle(events);
-
-        updateCounter();
-
-    }
-
-
-    /*
-    ==========================================
-    СЧЁТЧИК
-    ==========================================
-    */
-
-    function updateCounter() {
-
-        document.getElementById("counter")
-            .textContent =
-            `Осталось карт: ${deck.length}`;
-
-    }
-
-
-    /*
-    ==========================================
-    ВЫТЯНУТЬ КАРТУ
-    ==========================================
-    */
-
-    function drawCard() {
 
         /*
-        Если карты закончились —
-        автоматически создаём новую колоду.
+            Проверяем сохранённую колоду.
         */
 
-        if (deck.length === 0) {
+        if (
+            !Array.isArray(gameState.deck)
+            ||
+            !gameState.deck.every(
+                index =>
+                    Number.isInteger(index)
+                    &&
+                    index >= 0
+                    &&
+                    index < events.length
+            )
+        ) {
 
             createDeck();
 
+            return;
         }
 
 
+        deck =
+            gameState.deck;
+
+
         /*
-        Берём последнюю карту
+            Восстанавливаем последнюю карту.
         */
 
-        const event =
-            deck.pop();
+        if (
+            Number.isInteger(
+                gameState.lastEventIndex
+            )
+            &&
+            gameState.lastEventIndex >= 0
+            &&
+            gameState.lastEventIndex < events.length
+        ) {
+
+            lastEventIndex =
+                gameState.lastEventIndex;
+
+
+            showCard(
+                events[lastEventIndex]
+            );
+
+        }
 
 
         updateCounter();
 
+    }
 
-        /*
-        Получаем путь к изображению
-        */
+    catch (error) {
 
-        const imagePath =
-            cardImages[event.name];
-
-
-        const container =
-            document.getElementById(
-                "cardContainer"
-            );
+        console.error(
+            "Ошибка загрузки сохранения:",
+            error
+        );
 
 
-        /*
-        Показываем карту
-        */
+        createDeck();
 
-        container.innerHTML = `
+    }
 
-            <div class="card appear">
+}
 
-                <img
-                    class="card-image"
-                    src="${imagePath}"
-                    alt="${event.name}"
-                    onerror="imageError(this)"
-                >
 
-                <div class="card-info">
+/* =========================================
+   СЧЁТЧИК
+========================================= */
 
-                    <div class="card-title">
-                        ${event.name}
-                    </div>
 
-                    <div class="card-description">
-                        ${event.description}
-                    </div>
+function updateCounter() {
 
+    document.getElementById(
+        "counter"
+    ).textContent =
+
+        `Осталось событий: ${deck.length}`;
+
+}
+
+
+/* =========================================
+   ПОКАЗАТЬ СОБЫТИЕ
+========================================= */
+
+
+function showCard(event) {
+
+    const imagePath =
+        cardImages[event.name];
+
+
+    const container =
+        document.getElementById(
+            "cardContainer"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="card appear">
+
+            <img
+                class="card-image"
+                src="${imagePath}"
+                alt="${event.name}"
+                onerror="imageError(this)"
+            >
+
+            <div class="card-info">
+
+                <div class="card-title">
+                    ${event.name}
+                </div>
+
+                <div class="card-description">
+                    ${event.description}
                 </div>
 
             </div>
 
-        `;
+        </div>
 
-    }
+    `;
+
+}
 
 
-    /*
-    ==========================================
-    ОШИБКА ЗАГРУЗКИ КАРТИНКИ
-    ==========================================
-    */
+/* =========================================
+   ВЫТЯНУТЬ СОБЫТИЕ
+========================================= */
 
-    function imageError(image) {
 
-        console.error(
-            "Не удалось загрузить:",
-            image.src
-        );
-
-        image.parentElement.innerHTML = `
-
-            <div class="placeholder">
-
-                ❌ Картинка не найдена
-
-            </div>
-
-        `;
-
-    }
-
+function drawCard() {
 
     /*
-    ==========================================
-    СБРОС КОЛОДЫ
-    ==========================================
+        Если все 12 событий закончились,
+        автоматически создаётся новая колода.
     */
 
-    function resetDeck() {
+    if (deck.length === 0) {
 
         createDeck();
 
-
-        document.getElementById(
-            "cardContainer"
-        ).innerHTML = `
-
-            <div class="placeholder">
-
-                Нажми «Вытянуть карту»
-
-            </div>
-
-        `;
-
     }
 
 
     /*
-    ==========================================
-    ЗАПУСК
-    ==========================================
+        Берём последнюю карту.
+    */
+
+    const eventIndex =
+        deck.pop();
+
+
+    const event =
+        events[eventIndex];
+
+
+    lastEventIndex =
+        eventIndex;
+
+
+    /*
+        Показываем карту.
+    */
+
+    showCard(event);
+
+
+    /*
+        Обновляем счётчик.
+    */
+
+    updateCounter();
+
+
+    /*
+        Сохраняем состояние.
+
+        Поэтому после обновления страницы
+        карта и оставшаяся колода сохранятся.
+    */
+
+    saveGame();
+
+}
+
+
+/* =========================================
+   ОШИБКА КАРТИНКИ
+========================================= */
+
+
+function imageError(image) {
+
+    console.error(
+        "Не удалось загрузить:",
+        image.src
+    );
+
+
+    image.parentElement.innerHTML = `
+
+        <div class="placeholder">
+
+            ❌ Картинка не найдена
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+   НОВАЯ КОЛОДА
+========================================= */
+
+
+function resetDeck() {
+
+    /*
+        Удаляем старое сохранение.
+    */
+
+    localStorage.removeItem(
+        STORAGE_KEY
+    );
+
+
+    /*
+        Создаём новую колоду.
     */
 
     createDeck();
 
+
+    /*
+        Показываем заглушку.
+    */
+
+    document.getElementById(
+        "cardContainer"
+    ).innerHTML = `
+
+        <div class="placeholder">
+
+            Нажми «Вытянуть событие»
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================
+   ЗАПУСК
+========================================= */
+
+
+loadGame();
+
+
 </script>
 
+
 </body>
+
 </html>
