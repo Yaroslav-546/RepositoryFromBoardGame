@@ -111,6 +111,16 @@ body {
     }
 }
 
+/* BONUS HP */
+
+.player.bonus {
+    border-color: #a87500;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.5),
+        0 0 25px rgba(255,190,0,.15);
+}
+
 /* DEAD */
 
 .player.dead {
@@ -144,6 +154,22 @@ body {
 .max {
     color: #777;
     font-size: 14px;
+}
+
+/* BONUS TEXT */
+
+.bonus-text {
+    color: #ffc928;
+    font-size: 12px;
+    font-weight: bold;
+
+    margin-left: 5px;
+
+    display: none;
+}
+
+.player.bonus .bonus-text {
+    display: inline;
 }
 
 /* STATUS */
@@ -226,6 +252,17 @@ body {
         0 0 18px rgba(255,37,37,.6);
 }
 
+.hp-fill.bonus {
+    background: linear-gradient(
+        90deg,
+        #b36b00,
+        #ffd21c
+    );
+
+    box-shadow:
+        0 0 18px rgba(255,190,30,.65);
+}
+
 .hp-fill.dead {
     background: #333;
     box-shadow: none;
@@ -292,7 +329,7 @@ button:active {
     background: #176a2b;
 }
 
-/* BIG ACTIONS */
+/* RESET */
 
 .extra-controls {
     display: flex;
@@ -305,12 +342,12 @@ button:active {
     flex: 1;
 }
 
-.max-btn {
-    background: #333;
-}
-
 .reset-player {
     background: #292929;
+}
+
+.reset-player:hover {
+    background: #3a3a3a;
 }
 
 /* LAST CHANGE */
@@ -341,7 +378,6 @@ button:active {
     padding: 14px;
 
     background: #171717;
-
     border: 1px solid #333;
 }
 
@@ -425,8 +461,17 @@ button:active {
         <div class="hp-row">
 
             <div class="hp">
+
                 <span id="hp-0">200</span>
-                <span class="max">/ 200 HP</span>
+
+                <span class="max">
+                    / 200 HP
+                </span>
+
+                <span class="bonus-text">
+                    БОНУС
+                </span>
+
             </div>
 
             <div class="status" id="status-0">
@@ -446,29 +491,49 @@ button:active {
 
         <div class="controls">
 
-            <button class="damage" onclick="changeHP(0,-5)">−5</button>
-            <button class="damage" onclick="changeHP(0,-10)">−10</button>
-            <button class="damage" onclick="changeHP(0,-20)">−20</button>
-            <button class="damage" onclick="changeHP(0,-40)">−40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="heal" onclick="changeHP(0,5)">+5</button>
-            <button class="heal" onclick="changeHP(0,10)">+10</button>
-            <button class="heal" onclick="changeHP(0,20)">+20</button>
-            <button class="heal" onclick="changeHP(0,40)">+40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="max-btn" onclick="maxHP(0)">
-                MAX HP
+            <button class="damage" onclick="changeHP(0,-5)">
+                −5
             </button>
 
-            <button class="reset-player" onclick="resetPlayer(0)">
+            <button class="damage" onclick="changeHP(0,-10)">
+                −10
+            </button>
+
+            <button class="damage" onclick="changeHP(0,-20)">
+                −20
+            </button>
+
+            <button class="damage" onclick="changeHP(0,-40)">
+                −40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(0,5)">
+                +5
+            </button>
+
+            <button class="heal" onclick="changeHP(0,10)">
+                +10
+            </button>
+
+            <button class="heal" onclick="changeHP(0,20)">
+                +20
+            </button>
+
+            <button class="heal" onclick="changeHP(0,40)">
+                +40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button
+                class="reset-player"
+                onclick="resetPlayer(0)">
                 СБРОС
             </button>
 
@@ -494,8 +559,17 @@ button:active {
         <div class="hp-row">
 
             <div class="hp">
+
                 <span id="hp-1">200</span>
-                <span class="max">/ 200 HP</span>
+
+                <span class="max">
+                    / 200 HP
+                </span>
+
+                <span class="bonus-text">
+                    БОНУС
+                </span>
+
             </div>
 
             <div class="status" id="status-1">
@@ -505,34 +579,59 @@ button:active {
         </div>
 
         <div class="hp-bar">
-            <div class="hp-fill green" id="bar-1"></div>
+
+            <div
+                class="hp-fill green"
+                id="bar-1">
+            </div>
+
         </div>
 
         <div class="controls">
 
-            <button class="damage" onclick="changeHP(1,-5)">−5</button>
-            <button class="damage" onclick="changeHP(1,-10)">−10</button>
-            <button class="damage" onclick="changeHP(1,-20)">−20</button>
-            <button class="damage" onclick="changeHP(1,-40)">−40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="heal" onclick="changeHP(1,5)">+5</button>
-            <button class="heal" onclick="changeHP(1,10)">+10</button>
-            <button class="heal" onclick="changeHP(1,20)">+20</button>
-            <button class="heal" onclick="changeHP(1,40)">+40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="max-btn" onclick="maxHP(1)">
-                MAX HP
+            <button class="damage" onclick="changeHP(1,-5)">
+                −5
             </button>
 
-            <button class="reset-player" onclick="resetPlayer(1)">
+            <button class="damage" onclick="changeHP(1,-10)">
+                −10
+            </button>
+
+            <button class="damage" onclick="changeHP(1,-20)">
+                −20
+            </button>
+
+            <button class="damage" onclick="changeHP(1,-40)">
+                −40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(1,5)">
+                +5
+            </button>
+
+            <button class="heal" onclick="changeHP(1,10)">
+                +10
+            </button>
+
+            <button class="heal" onclick="changeHP(1,20)">
+                +20
+            </button>
+
+            <button class="heal" onclick="changeHP(1,40)">
+                +40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button
+                class="reset-player"
+                onclick="resetPlayer(1)">
                 СБРОС
             </button>
 
@@ -558,8 +657,17 @@ button:active {
         <div class="hp-row">
 
             <div class="hp">
+
                 <span id="hp-2">200</span>
-                <span class="max">/ 200 HP</span>
+
+                <span class="max">
+                    / 200 HP
+                </span>
+
+                <span class="bonus-text">
+                    БОНУС
+                </span>
+
             </div>
 
             <div class="status" id="status-2">
@@ -569,34 +677,59 @@ button:active {
         </div>
 
         <div class="hp-bar">
-            <div class="hp-fill green" id="bar-2"></div>
+
+            <div
+                class="hp-fill green"
+                id="bar-2">
+            </div>
+
         </div>
 
         <div class="controls">
 
-            <button class="damage" onclick="changeHP(2,-5)">−5</button>
-            <button class="damage" onclick="changeHP(2,-10)">−10</button>
-            <button class="damage" onclick="changeHP(2,-20)">−20</button>
-            <button class="damage" onclick="changeHP(2,-40)">−40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="heal" onclick="changeHP(2,5)">+5</button>
-            <button class="heal" onclick="changeHP(2,10)">+10</button>
-            <button class="heal" onclick="changeHP(2,20)">+20</button>
-            <button class="heal" onclick="changeHP(2,40)">+40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="max-btn" onclick="maxHP(2)">
-                MAX HP
+            <button class="damage" onclick="changeHP(2,-5)">
+                −5
             </button>
 
-            <button class="reset-player" onclick="resetPlayer(2)">
+            <button class="damage" onclick="changeHP(2,-10)">
+                −10
+            </button>
+
+            <button class="damage" onclick="changeHP(2,-20)">
+                −20
+            </button>
+
+            <button class="damage" onclick="changeHP(2,-40)">
+                −40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(2,5)">
+                +5
+            </button>
+
+            <button class="heal" onclick="changeHP(2,10)">
+                +10
+            </button>
+
+            <button class="heal" onclick="changeHP(2,20)">
+                +20
+            </button>
+
+            <button class="heal" onclick="changeHP(2,40)">
+                +40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button
+                class="reset-player"
+                onclick="resetPlayer(2)">
                 СБРОС
             </button>
 
@@ -622,8 +755,17 @@ button:active {
         <div class="hp-row">
 
             <div class="hp">
+
                 <span id="hp-3">200</span>
-                <span class="max">/ 200 HP</span>
+
+                <span class="max">
+                    / 200 HP
+                </span>
+
+                <span class="bonus-text">
+                    БОНУС
+                </span>
+
             </div>
 
             <div class="status" id="status-3">
@@ -633,34 +775,59 @@ button:active {
         </div>
 
         <div class="hp-bar">
-            <div class="hp-fill green" id="bar-3"></div>
+
+            <div
+                class="hp-fill green"
+                id="bar-3">
+            </div>
+
         </div>
 
         <div class="controls">
 
-            <button class="damage" onclick="changeHP(3,-5)">−5</button>
-            <button class="damage" onclick="changeHP(3,-10)">−10</button>
-            <button class="damage" onclick="changeHP(3,-20)">−20</button>
-            <button class="damage" onclick="changeHP(3,-40)">−40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="heal" onclick="changeHP(3,5)">+5</button>
-            <button class="heal" onclick="changeHP(3,10)">+10</button>
-            <button class="heal" onclick="changeHP(3,20)">+20</button>
-            <button class="heal" onclick="changeHP(3,40)">+40</button>
-
-        </div>
-
-        <div class="extra-controls">
-
-            <button class="max-btn" onclick="maxHP(3)">
-                MAX HP
+            <button class="damage" onclick="changeHP(3,-5)">
+                −5
             </button>
 
-            <button class="reset-player" onclick="resetPlayer(3)">
+            <button class="damage" onclick="changeHP(3,-10)">
+                −10
+            </button>
+
+            <button class="damage" onclick="changeHP(3,-20)">
+                −20
+            </button>
+
+            <button class="damage" onclick="changeHP(3,-40)">
+                −40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button class="heal" onclick="changeHP(3,5)">
+                +5
+            </button>
+
+            <button class="heal" onclick="changeHP(3,10)">
+                +10
+            </button>
+
+            <button class="heal" onclick="changeHP(3,20)">
+                +20
+            </button>
+
+            <button class="heal" onclick="changeHP(3,40)">
+                +40
+            </button>
+
+        </div>
+
+        <div class="extra-controls">
+
+            <button
+                class="reset-player"
+                onclick="resetPlayer(3)">
                 СБРОС
             </button>
 
@@ -688,6 +855,10 @@ button:active {
 
 <script>
 
+/* -------------------------
+   НАСТРОЙКИ
+------------------------- */
+
 const MAX_HP = 200;
 
 const players = [
@@ -702,13 +873,31 @@ const players = [
    LOAD HP
 ------------------------- */
 
-let hp = JSON.parse(
-    localStorage.getItem("lastVillainHP")
-) || [200,200,200,200];
+let savedHP =
+    localStorage.getItem("lastVillainHP");
+
+let hp;
+
+if (savedHP) {
+
+    hp = JSON.parse(savedHP);
+
+    if (
+        !Array.isArray(hp) ||
+        hp.length !== players.length
+    ) {
+        hp = [200, 200, 200, 200];
+    }
+
+} else {
+
+    hp = [200, 200, 200, 200];
+
+}
 
 
 /* -------------------------
-   UPDATE
+   UPDATE PLAYER
 ------------------------- */
 
 function updatePlayer(id) {
@@ -727,8 +916,24 @@ function updatePlayer(id) {
     const player =
         document.getElementById(`player-${id}`);
 
+
+    /*
+       Полоса не может быть длиннее 100%.
+
+       Например:
+       200 HP = 100%
+       300 HP = 100%
+       500 HP = 100%
+
+       Само число HP при этом
+       продолжает увеличиваться.
+    */
+
     const percentage =
-        (value / MAX_HP) * 100;
+        Math.min(
+            (value / MAX_HP) * 100,
+            100
+        );
 
 
     hpText.textContent = value;
@@ -737,24 +942,24 @@ function updatePlayer(id) {
         percentage + "%";
 
 
-    /* remove old colors */
+    /* REMOVE OLD COLORS */
 
     bar.classList.remove(
         "green",
         "yellow",
         "red",
-        "dead"
+        "dead",
+        "bonus"
     );
 
     player.classList.remove(
         "low",
-        "dead"
+        "dead",
+        "bonus"
     );
 
 
-    /* -------------------------
-       HP STATES
-    ------------------------- */
+    /* DEAD */
 
     if (value <= 0) {
 
@@ -767,7 +972,24 @@ function updatePlayer(id) {
 
     }
 
-    else if (percentage < 30) {
+
+    /* BONUS HP */
+
+    else if (value > MAX_HP) {
+
+        bar.classList.add("bonus");
+
+        status.textContent =
+            "БОНУС HP";
+
+        player.classList.add("bonus");
+
+    }
+
+
+    /* LOW HP */
+
+    else if (value < MAX_HP * 0.30) {
 
         bar.classList.add("red");
 
@@ -778,7 +1000,10 @@ function updatePlayer(id) {
 
     }
 
-    else if (percentage < 60) {
+
+    /* MEDIUM HP */
+
+    else if (value < MAX_HP * 0.60) {
 
         bar.classList.add("yellow");
 
@@ -786,6 +1011,9 @@ function updatePlayer(id) {
             "ОПАСНО";
 
     }
+
+
+    /* NORMAL HP */
 
     else {
 
@@ -797,7 +1025,7 @@ function updatePlayer(id) {
     }
 
 
-    /* save */
+    /* SAVE */
 
     localStorage.setItem(
         "lastVillainHP",
@@ -814,12 +1042,29 @@ function changeHP(id, amount) {
 
     const oldHP = hp[id];
 
+
+    /*
+       Верхнего ограничения НЕТ.
+
+       Поэтому:
+       200 + 40 = 240
+       240 + 40 = 280
+       280 + 40 = 320
+
+       и так далее.
+    */
+
     hp[id] += amount;
+
+
+    /*
+       Но HP не может быть меньше 0.
+    */
 
     hp[id] =
         Math.max(
             0,
-            Math.min(MAX_HP, hp[id])
+            hp[id]
         );
 
 
@@ -860,23 +1105,6 @@ function changeHP(id, amount) {
 
 
 /* -------------------------
-   MAX HP
-------------------------- */
-
-function maxHP(id) {
-
-    hp[id] = MAX_HP;
-
-    document.getElementById(
-        `change-${id}`
-    ).textContent =
-        "♥ HP восстановлено полностью";
-
-    updatePlayer(id);
-}
-
-
-/* -------------------------
    RESET PLAYER
 ------------------------- */
 
@@ -884,10 +1112,12 @@ function resetPlayer(id) {
 
     hp[id] = MAX_HP;
 
+
     document.getElementById(
         `change-${id}`
     ).textContent =
         "↻ Игрок сброшен";
+
 
     updatePlayer(id);
 }
@@ -903,6 +1133,7 @@ function resetAll() {
         confirm(
             "Сбросить HP всех игроков до 200?"
         );
+
 
     if (!confirmed) return;
 
